@@ -1,7 +1,7 @@
 import {inject, Provider} from '@loopback/core';
 import {Filter, Where} from '@loopback/repository';
 import {getService} from '@loopback/service-proxy';
-import { MessageDataSource } from '../datasources/message.datasource';
+import {MessageDataSource} from '../datasources';
 import {SocketMessage, SocketMessageRecipient} from '../models';
 
 export interface Messageservice {

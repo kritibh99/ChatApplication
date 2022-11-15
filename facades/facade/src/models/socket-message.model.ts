@@ -47,3 +47,4 @@ export class SocketMessage extends Entity {
     super(data);
   }
 }
+

@@ -1,8 +1,9 @@
 import {ApplicationConfig, FacadeApplication} from './application';
-
+import * as dotenv from 'dotenv';
 export * from './application';
 
-const PORT = 3000;
+dotenv.config();
+const PORT = 3004;
 
 export async function main(options: ApplicationConfig = {}) {
   const app = new FacadeApplication(options);

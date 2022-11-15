@@ -1,6 +1,6 @@
 import {inject, Provider} from '@loopback/core';
 import {getService} from '@loopback/service-proxy';
-import { NotificationDataSource } from '../datasources/notification.datasource';
+import {NotificationDataSource} from '../datasources';
 import {SocketNotification} from '../models';
 
 export interface Notificationservice {
@@ -27,3 +27,4 @@ export class NotificationserviceProvider
     return getService(this.dataSource);
   }
 }
+
