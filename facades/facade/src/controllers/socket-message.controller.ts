@@ -24,9 +24,9 @@ import {
   OPERATION_SECURITY_SPEC,
   STATUS_CODE,
 } from '@sourceloop/core';
+import {PermissionKey} from '../permission-key.enum';
 import { Messageservice } from '../services/messageservice.service';
 import { Notificationservice } from '../services/notificationservice.service';
-import { PermissionKey } from '../permission-key.enum';
 
 export class PubnubMessageController {
   constructor(
@@ -36,7 +36,6 @@ export class PubnubMessageController {
     private readonly notifService: Notificationservice,
   ) {}
 
-  
   @authenticate(STRATEGY.BEARER)
   @authorize({permissions: [PermissionKey.ViewMessage]})
   @get('/messages', {
@@ -57,19 +56,17 @@ export class PubnubMessageController {
   })
   async find(
     // sonarignore:start
-    @inject(AuthenticationBindings.CURRENT_USER) user: IAuthUserWithPermissions,
     @param.header.string('Authorization') token: string,
     @param.query.string('ChannelID') channelID?: string,
+    // @inject(AuthenticationBindings.CURRENT_USER) user: IAuthUserWithPermissions,
     @param.filter(SocketMessage) filter?: Filter<SocketMessage>,
     // sonarignore:end
   ): Promise<SocketMessage[]> {
-    console.log()
     const filter1: Filter<SocketMessage> = {
       where: {
         channelId: channelID,
       },
       order: ['createdOn ASC'],
-      
     };
     return this.messageService.getMessage(token, filter1);
   }
@@ -102,7 +99,6 @@ export class PubnubMessageController {
     message: SocketMessage,
   ): Promise<SocketMessage> {
     message.channelId = message.channelId ?? message.toUserId;
-    console.log('');
     const msg = await this.messageService.createMessage(message, token);
     const msgrecipient = new SocketMessageRecipient({
       channelId: message.channelId,
@@ -149,7 +145,7 @@ export class PubnubMessageController {
         },
       },
     })
-    messageRecipient: Partial<SocketMessageRecipient>, //NOSONAR
+    // messageRecipient: Partial<SocketMessageRecipient>, //NOSONAR
     @param.query.object('where', getWhereSchemaFor(SocketMessageRecipient))
     where?: Where<SocketMessageRecipient>, //NOSONAR
   ): Promise<SocketMessageRecipient> {

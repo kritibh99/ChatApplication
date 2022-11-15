@@ -1,3 +1,4 @@
+// https://opensource.org/licenses/MIT
 import {Entity, model, property} from '@loopback/repository';
 
 @model({settings: {strict: false}})
