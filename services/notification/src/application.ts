@@ -26,7 +26,13 @@ import {RestApplication} from '@loopback/rest';
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import * as openapi from './openapi.json';
-
+import {NotificationBindings} from 'loopback4-notifications';
+import {SNSBindings} from 'loopback4-notifications/sns';
+import {SESBindings} from 'loopback4-notifications/ses';
+import {
+  SocketIOProvider,
+  SocketBindings,
+} from 'loopback4-notifications/socketio';
 export {ApplicationConfig};
 
 export class NotificationApplication extends BootMixin(
@@ -96,6 +102,14 @@ export class NotificationApplication extends BootMixin(
       path: '/explorer',
     });
 
+    this.bind(SNSBindings.Config).to({});
+    this.bind(SESBindings.Config).to({});
+    this.bind(NotificationBindings.PushProvider).toProvider(SocketIOProvider);
+    this.bind(SocketBindings.Config).to({
+      url: 'ws://localhost:3000',
+      defaultPath: 'general-message',
+      options: {},
+    });
     this.component(RestExplorerComponent);
 
     this.projectRoot = __dirname;
