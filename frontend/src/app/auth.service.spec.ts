@@ -32,7 +32,23 @@ describe('AuthService', () => {
     expect(service).toBeTruthy();
   });
 
- 
- 
+  it("should get access token on calling getToken function", fakeAsync(() => {
+    service.getToken(mockCode).subscribe(token => {
+      expect(JSON.stringify(mocktoken)).toEqual(JSON.stringify(mocktoken))
+    });
+    let req = httpTestingController.expectOne(tokenUrl);
+    expect(req.request.method).toEqual("POST");
+    req.flush(mocktoken);
+  }));
+
+  it("should got login on calling login function", fakeAsync(() => {
+    service.login(mockusername,mockpassword).subscribe(code => {
+      expect(JSON.stringify(code)).toEqual(JSON.stringify({code:mockCode}))
+    });
+    let req = httpTestingController.expectOne(localAuthUrl);
+    expect(req.request.method).toEqual("POST");
+    req.flush({code:mockCode});
+  }));
+
 
 });

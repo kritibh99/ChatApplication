@@ -11,7 +11,7 @@ const channelUUID = environment.CHAT_ROOM;
 export const mockChat: Chat[] = [{
   id: '0fa5e293-098a-807b-99a5-955a0da609c2',
   subject: '343e42fa-2a87-6d05-8395-135f8e1714b8',
-  body: 'hello bhai',
+  body: 'hello',
   toUserId: channelUUID,
   channelId: channelUUID,
   channelType: '0'
@@ -39,6 +39,42 @@ describe('ChatService', () => {
     expect(service).toBeTruthy();
   });
 
+  it("should read user uuid on calling getUserTenantId", fakeAsync(() => {
+    service.getUserTenantId(token).subscribe(UserTenentId => {
+      expect(JSON.stringify(UserTenentId)).toEqual(JSON.stringify(mockUserTenentId))
+    });
+    let req = httpTestingController.expectOne(tenantIdUrl);
+    expect(req.request.method).toEqual("GET");
+    req.flush(mockUserTenentId);
+  }));
+
+  it("should read Chat correctly on calling the get function", fakeAsync(() => {
+    service.get(token,channelUUID).subscribe((chat) => {
+      
+      expect(JSON.stringify(chat)).toEqual(JSON.stringify(mockChat));
+
+    });
+    let req = httpTestingController.expectOne(baseUrl+'?ChannelID='+channelUUID);
+    expect(req.request.method).toEqual("GET");
+    req.flush(mockChat)
+  }));
+
+  it("should post Chat correctly on calling the post function", fakeAsync(() => {
+    const chatpost ={
+      id: '0fa5e293-098a-807b-99a5-955a0da609c3',
+      subject: '343e42fa-2a87-6d05-8395-135f8e1714b3',
+      body: 'hello',
+      toUserId: channelUUID,
+      channelId: channelUUID,
+      channelType: '0'
+    };
   
+    service.post(chatpost,token).subscribe((chat:Chat) => {
+      expect(chat).toEqual(chatpost);
+    });
+    let req = httpTestingController.expectOne(baseUrl)
+    expect(req.request.method).toEqual("POST");
+    req.flush(chatpost)
+  }));
 
 });
